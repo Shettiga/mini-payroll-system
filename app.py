@@ -1,5 +1,9 @@
 from flask import Flask, render_template, request, redirect, session
 import mysql.connector
+from flask import send_file
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+import io
 
 app = Flask(__name__)
 app.secret_key = "secretkey"
@@ -103,3 +107,38 @@ def logout():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+@app.route("/download_payslip/<int:salary_id>")
+def download_payslip(salary_id):
+    cursor.execute("""
+        SELECT e.name, e.designation, e.department, s.*
+        FROM salary s
+        JOIN employee e ON e.emp_id = s.emp_id
+        WHERE s.salary_id = %s
+    """, (salary_id,))
+    
+    row = cursor.fetchone()
+
+    if not row:
+        return "Payslip not found"
+
+    buffer = io.BytesIO()
+    pdf = canvas.Canvas(buffer, pagesize=letter)
+    pdf.setTitle("Payslip")
+
+    pdf.drawString(200, 750, "Employee Payslip")
+    pdf.drawString(50, 720, f"Employee Name: {row['name']}")
+    pdf.drawString(50, 700, f"Designation: {row['designation']}")
+    pdf.drawString(50, 680, f"Department: {row['department']}")
+
+    pdf.drawString(50, 650, f"HRA: {row['hra']}")
+    pdf.drawString(50, 630, f"DA: {row['da']}")
+    pdf.drawString(50, 610, f"Overtime: {row['overtime']}")
+    pdf.drawString(50, 590, f"Tax: {row['tax']}")
+    pdf.drawString(50, 570, f"PF: {row['pf']}")
+    pdf.drawString(50, 540, f"Net Salary: {row['net_salary']}")
+
+    pdf.save()
+    buffer.seek(0)
+
+    return send_file(buffer, as_attachment=True, download_name="payslip.pdf", mimetype='application/pdf')

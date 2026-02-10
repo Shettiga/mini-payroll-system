@@ -16,7 +16,11 @@
         Overtime: {{ row.overtime }}<br>
         Tax: {{ row.tax }}<br>
         PF: {{ row.pf }}<br>
-        <b>Net Salary: {{ row.net_salary }}</b>
+        <b>Net Salary: {{ row.net_salary }}</b><br><br>
+
+        <a href="{{ url_for('download_payslip', salary_id=row.salary_id) }}">
+            <button type="button">Download Payslip PDF</button>
+        </a>
         <hr>
     {% endfor %}
 </div>
