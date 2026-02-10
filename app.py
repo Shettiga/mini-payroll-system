@@ -13,6 +13,10 @@ db = mysql.connector.connect(
 
 cursor = db.cursor(dictionary=True)
 
+@app.route("/home")
+def home():
+    return render_template("home.html")
+
 # 🔐 Login
 @app.route("/", methods=["GET", "POST"])
 def login():

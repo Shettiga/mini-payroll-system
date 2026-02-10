@@ -122,3 +122,54 @@ table th {
     background: #4e73df;
     color: white;
 }
+
+/* Home Page Styling */
+.home-container {
+    text-align: center;
+    padding: 120px 20px;
+    color: white;
+}
+
+.home-container h1 {
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+.home-container p {
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.home-btn {
+    display: inline-block;
+    padding: 12px 25px;
+    margin: 10px;
+    background: white;
+    color: #4e73df;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.home-btn:hover {
+    background: #2e59d9;
+    color: white;
+}
+
+.home-btn.contact {
+    background: #1cc88a;
+    color: white;
+}
+
+.home-btn.contact:hover {
+    background: #17a673;
+}
+
+/* Contact Section */
+.contact-section {
+    background: white;
+    color: #333;
+    text-align: center;
+    padding: 40px 20px;
+}
