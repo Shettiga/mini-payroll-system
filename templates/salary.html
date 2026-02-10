@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Process Salary</h2>
+<form method="post">
+    Employee:
+    <select name="emp_id">
+        {% for emp in employees %}
+        <option value="{{ emp.emp_id }}">{{ emp.name }}</option>
+        {% endfor %}
+    </select><br>
+    HRA: <input type="number" name="hra"><br>
+    DA: <input type="number" name="da"><br>
+    Overtime: <input type="number" name="overtime"><br>
+    Tax: <input type="number" name="tax"><br>
+    PF: <input type="number" name="pf"><br>
+    <button type="submit">Calculate</button>
+</form>
+</body>
+</html>

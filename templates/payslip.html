@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Payslips</h2>
+{% for row in data %}
+    <h3>{{ row.name }}</h3>
+    HRA: {{ row.hra }}<br>
+    DA: {{ row.da }}<br>
+    Overtime: {{ row.overtime }}<br>
+    Tax: {{ row.tax }}<br>
+    PF: {{ row.pf }}<br>
+    <b>Net Salary: {{ row.net_salary }}</b>
+    <hr>
+{% endfor %}
+</body>
+</html>
