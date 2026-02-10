@@ -7,16 +7,18 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+  <div class="payslip">
     <h2>Payslips</h2>
-{% for row in data %}
-    <h3>{{ row.name }}</h3>
-    HRA: {{ row.hra }}<br>
-    DA: {{ row.da }}<br>
-    Overtime: {{ row.overtime }}<br>
-    Tax: {{ row.tax }}<br>
-    PF: {{ row.pf }}<br>
-    <b>Net Salary: {{ row.net_salary }}</b>
-    <hr>
-{% endfor %}
+    {% for row in data %}
+        <h3>{{ row.name }}</h3>
+        HRA: {{ row.hra }}<br>
+        DA: {{ row.da }}<br>
+        Overtime: {{ row.overtime }}<br>
+        Tax: {{ row.tax }}<br>
+        PF: {{ row.pf }}<br>
+        <b>Net Salary: {{ row.net_salary }}</b>
+        <hr>
+    {% endfor %}
+</div>
 </body>
 </html>

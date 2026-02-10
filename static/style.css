@@ -1,17 +1,124 @@
+/* General Page Styling */
 body {
-    font-family: Arial;
-    margin: 40px;
-    background: #f2f2f2;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #4e73df, #1cc88a);
+    margin: 0;
+    padding: 0;
 }
+
+/* Centered Container */
+.container {
+    width: 420px;
+    margin: 80px auto;
+    background: white;
+    padding: 25px 30px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* Headings */
 h2 {
+    text-align: center;
     color: #333;
+    margin-bottom: 20px;
 }
-input, select, button {
-    margin: 5px 0;
-    padding: 6px;
+
+/* Form Inputs */
+input[type="text"],
+input[type="password"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0 15px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+    transition: border 0.3s;
 }
+
+input:focus, select:focus {
+    border: 1px solid #4e73df;
+    outline: none;
+}
+
+/* Buttons */
 button {
-    background: #4CAF50;
+    width: 100%;
+    padding: 10px;
+    background: #4e73df;
     color: white;
     border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background: #2e59d9;
+}
+
+/* Dashboard Links */
+.dashboard {
+    width: 420px;
+    margin: 100px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.dashboard a {
+    display: block;
+    margin: 12px 0;
+    padding: 10px;
+    background: #1cc88a;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background 0.3s;
+}
+
+.dashboard a:hover {
+    background: #17a673;
+}
+
+/* Payslip Styling */
+.payslip {
+    width: 600px;
+    margin: 40px auto;
+    background: white;
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+.payslip h3 {
+    color: #4e73df;
+}
+
+.payslip hr {
+    border: 0;
+    height: 1px;
+    background: #ddd;
+    margin: 15px 0;
+}
+
+/* Table Style (Optional for future reports) */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th, table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+table th {
+    background: #4e73df;
+    color: white;
 }
