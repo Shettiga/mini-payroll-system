@@ -99,15 +99,8 @@ def payslip():
     data = cursor.fetchall()
     return render_template("payslip.html", data=data)
 
-# 🚪 Logout
-@app.route("/logout")
-def logout():
-    session.pop("admin", None)
-    return redirect("/")
 
-if __name__ == "__main__":
-    app.run(debug=True)
-
+# 📥 Download Payslip PDF
 @app.route("/download_payslip/<int:salary_id>")
 def download_payslip(salary_id):
     cursor.execute("""
@@ -118,19 +111,16 @@ def download_payslip(salary_id):
     """, (salary_id,))
     
     row = cursor.fetchone()
-
     if not row:
         return "Payslip not found"
 
     buffer = io.BytesIO()
     pdf = canvas.Canvas(buffer, pagesize=letter)
-    pdf.setTitle("Payslip")
 
     pdf.drawString(200, 750, "Employee Payslip")
     pdf.drawString(50, 720, f"Employee Name: {row['name']}")
     pdf.drawString(50, 700, f"Designation: {row['designation']}")
     pdf.drawString(50, 680, f"Department: {row['department']}")
-
     pdf.drawString(50, 650, f"HRA: {row['hra']}")
     pdf.drawString(50, 630, f"DA: {row['da']}")
     pdf.drawString(50, 610, f"Overtime: {row['overtime']}")
@@ -138,7 +128,21 @@ def download_payslip(salary_id):
     pdf.drawString(50, 570, f"PF: {row['pf']}")
     pdf.drawString(50, 540, f"Net Salary: {row['net_salary']}")
 
+    pdf.showPage()
     pdf.save()
-    buffer.seek(0)
 
-    return send_file(buffer, as_attachment=True, download_name="payslip.pdf", mimetype='application/pdf')
+    buffer.seek(0)
+    return send_file(buffer, as_attachment=True,
+                     download_name="payslip.pdf",
+                     mimetype="application/pdf")
+
+
+# 🚪 Logout
+@app.route("/logout")
+def logout():
+    session.pop("admin", None)
+    return redirect("/")
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
