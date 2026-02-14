@@ -1,6 +1,5 @@
-from flask import Flask, render_template, request, redirect, session, flash
+from flask import Flask, render_template, request, redirect, session, flash, send_file
 import mysql.connector
-from flask import send_file
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 import io
@@ -8,6 +7,7 @@ import io
 app = Flask(__name__)
 app.secret_key = "secretkey"
 
+# ✅ Database Connection
 db = mysql.connector.connect(
     host="localhost",
     user="root",
@@ -21,13 +21,17 @@ cursor = db.cursor(dictionary=True)
 def home():
     return render_template("home.html")
 
+# 🔐 Login
 @app.route("/", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
 
-        cursor.execute("SELECT * FROM admin WHERE username=%s AND password=%s", (username, password))
+        cursor.execute(
+            "SELECT * FROM admin WHERE username=%s AND password=%s",
+            (username, password)
+        )
         user = cursor.fetchone()
 
         if user:
@@ -55,10 +59,13 @@ def add_employee():
         department = request.form["department"]
         basic_salary = request.form["basic_salary"]
 
-        cursor.execute("INSERT INTO employee (name, designation, department, basic_salary) VALUES (%s,%s,%s,%s)",
-                       (name, designation, department, basic_salary))
+        cursor.execute(
+            "INSERT INTO employee (name, designation, department, basic_salary) VALUES (%s,%s,%s,%s)",
+            (name, designation, department, basic_salary)
+        )
         db.commit()
-        return "Employee Added Successfully"
+        flash("Employee Added Successfully!", "success")
+        return redirect("/view_employee")
 
     return render_template("add_employee.html")
 
@@ -83,24 +90,29 @@ def salary():
         deductions = tax + pf
         net_salary = gross - deductions
 
-        cursor.execute("INSERT INTO salary (emp_id, hra, da, overtime, tax, pf, net_salary) VALUES (%s,%s,%s,%s,%s,%s,%s)",
-                       (emp_id, hra, da, overtime, tax, pf, net_salary))
+        cursor.execute(
+            "INSERT INTO salary (emp_id, hra, da, overtime, tax, pf, net_salary) VALUES (%s,%s,%s,%s,%s,%s,%s)",
+            (emp_id, hra, da, overtime, tax, pf, net_salary)
+        )
         db.commit()
 
-        return f"Salary Processed! Net Salary: {net_salary}"
+        flash(f"Salary Processed! Net Salary: {net_salary}", "success")
+        return redirect("/payslip")
 
     return render_template("salary.html", employees=employees)
 
 # 🧾 View Payslip
 @app.route("/payslip")
 def payslip():
-    cursor.execute("""SELECT e.name, s.* FROM salary s 
-                      JOIN employee e ON e.emp_id = s.emp_id""")
+    cursor.execute("""
+        SELECT e.name, s.* 
+        FROM salary s
+        JOIN employee e ON e.emp_id = s.emp_id
+    """)
     data = cursor.fetchall()
     return render_template("payslip.html", data=data)
 
-
-# 📥 Download Payslip PDF
+# 📥 Download Payslip
 @app.route("/download_payslip/<int:salary_id>")
 def download_payslip(salary_id):
     cursor.execute("""
@@ -136,16 +148,21 @@ def download_payslip(salary_id):
                      download_name="payslip.pdf",
                      mimetype="application/pdf")
 
+# 👀 View Employees
 @app.route("/view_employee")
 def view_employee():
     cursor.execute("SELECT * FROM employee")
     data = cursor.fetchall()
     return render_template("view_employee.html", data=data)
 
+# ❌ Delete Employee
 @app.route("/delete_employee/<int:emp_id>")
 def delete_employee(emp_id):
+
+    cursor.execute("DELETE FROM salary WHERE emp_id=%s", (emp_id,))
     cursor.execute("DELETE FROM employee WHERE emp_id=%s", (emp_id,))
-    conn.commit()
+    db.commit()
+
     flash("Employee deleted successfully!", "success")
     return redirect("/view_employee")
 
@@ -154,7 +171,6 @@ def delete_employee(emp_id):
 def logout():
     session.pop("admin", None)
     return redirect("/")
-
 
 if __name__ == "__main__":
     app.run(debug=True)
