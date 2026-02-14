@@ -136,6 +136,18 @@ def download_payslip(salary_id):
                      download_name="payslip.pdf",
                      mimetype="application/pdf")
 
+@app.route("/view_employee")
+def view_employee():
+    cursor.execute("SELECT * FROM employee")
+    data = cursor.fetchall()
+    return render_template("view_employee.html", data=data)
+
+@app.route("/delete_employee/<int:emp_id>")
+def delete_employee(emp_id):
+    cursor.execute("DELETE FROM employee WHERE emp_id=%s", (emp_id,))
+    conn.commit()
+    flash("Employee deleted successfully!", "success")
+    return redirect("/view_employee")
 
 # 🚪 Logout
 @app.route("/logout")
