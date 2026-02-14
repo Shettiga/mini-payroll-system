@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, flash
 import mysql.connector
 from flask import send_file
 from reportlab.lib.pagesizes import letter
@@ -21,7 +21,6 @@ cursor = db.cursor(dictionary=True)
 def home():
     return render_template("home.html")
 
-# 🔐 Login
 @app.route("/", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -35,7 +34,8 @@ def login():
             session["admin"] = username
             return redirect("/dashboard")
         else:
-            return "Invalid Login"
+            flash("Invalid Username or Password!", "error")
+            return redirect("/")
 
     return render_template("login.html")
 

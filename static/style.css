@@ -173,3 +173,12 @@ table th {
     text-align: center;
     padding: 40px 20px;
 }
+
+.alert {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    text-align: center;
+}
